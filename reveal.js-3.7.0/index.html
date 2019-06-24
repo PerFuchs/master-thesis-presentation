@@ -38,6 +38,7 @@
                 <h3>Cyclic queries in Graph-pattern matching pose new challenges to relational engines</h3>
                 <img src="img/triangle.svg" alt="Depiction of triangle query"/>
                 <img src="img/triangle-binary-joins.svg" alt="Depiction of bushy binary join tree"/>
+                <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
                 <aside class="notes">
                     <ul>
                         <li>Traditionally we have Snowflakes and Star joins.</li>
@@ -53,14 +54,17 @@
                         <li>solved by the join plan depicted below</li>
                         <li>point out sizes of intermediary resutls O(N<sup>2</sup>)</li>
                         <li>compare to end result size O(N<sup>3/2</sup>)</li>
+                        <li>Explain datalog query: one variable per vertice, one relationship per edge (all for the edge relationship -
+                            alias) with attributes according to the edges
+                        </li>
                     </ul>
                 </aside>
             </section>
             <section>
                 <h3>Why are cyclic pattern important?</h3>
-                <img src="img/kite.svg" alt="Deptiction of kite query">
-                <img src="img/diamond.svg" alt="Deptiction of diamond query">
-                <img src="img/5-cycle.svg" alt="Deptiction of 5 cycle">
+                <img src="img/kite.svg" alt="Depiction of kite query">
+                <img src="img/diamond.svg" alt="Depiction of diamond query">
+                <img src="img/5-cycle.svg" alt="Depiction of 5 cycle">
                 <aside class="notes">
                     <p>the kite: an example for friends recommendation, see two triangles</p>
                     <p>diamond: used by twitter in production to recommend people to follow</p>
@@ -72,22 +76,24 @@
                 <img src="img/triangle.svg" alt="depiction of triangle query">
                 <ul>
                     <li>Idea: build the join by <i>variable-at-a-time</i></li>
-                    <li>safes to build intermediary results which lead to no end result</li>
+                    <li>no intermediary results</li>
                     <li>developed 2012 and proven to be worst-case optimal, e.g. for triangles in
-                    O(N<sup>3/2</sup>)</li>
-                    <li>demonstrated record of high performance for circular queries TODO cites with year</li>
+                        O(N<sup>3/2</sup>)
+                    </li>
+                    <li>high performance for graph-pattern matching is well established: TODO cites with year</li>
                 </ul>
                 <aside class="notes">
                     <ul>
                         <li>Explain idea</li>
                         <li>idea translated to the triangle query, bind A, bind B, find C's</li>
+                        <li>Note this is an n-ary join</li>
                     </ul>
                 </aside>
             </section>
             <section>
                 <h3>Our contributions</h3>
                 <ol>
-                    <li>build a scalable, parallel WCOJ in Spark</li>
+                    <li>integrate a scalable, parallel WCOJ in Spark</li>
                     <li>Specialize WCOJ to Graphs (not in this presentation)</li>
                 </ol>
                 <aside class="notes">
@@ -99,7 +105,8 @@
                             </li>
                             <li>Neo4J currently builds a Cypher frontend for Spark (stretch goal)</li>
                             <li>Well suited for long running analytical queries with its fault tolerance and
-                            ability to run on many nodes</li>
+                                ability to run on many nodes
+                            </li>
                         </ul>
                         <li>Superiority over binary joins was ALWAYS - in every single paper - shown for graphs</li>
                         <ul>
@@ -114,45 +121,156 @@
         <section data-title="Building a scalable WCOJ in Spark">
             <section>
                 <h3>Distribution of existing Spark joins</h3>
-                Explain Broadcast Hash join
+                <img src="img/broadcast-hash-join.png"/>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>attr 1</th>
+                        <th>attr 2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>key</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>attr 1</th>
+                        <th>attr 2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>key</td>
+                    </tr>
+                    </tbody>
+                </table>
+                Example join query in SQL
                 <aside class="notes">
-                    Note that Spark is an system which uses the Bulksynchrounous model like MapReduce (one map step (no communication),
-                    one reduce step (communication by data redistribution), and so forth)
+                    <ul>
+                        <li>Note that Spark is an system which uses the Bulksynchrounous model like MapReduce (one map step (no
+                            communication),
+                            one reduce step (communication by data redistribution), and so forth)
+                        </li>
+                        <li>Spark organizes data in resilient distribute datasets</li>
+                        <li>These are distributed onto the workers by a function chosen by a programmer, e.g. by an attribute</li>
+                        <li>A join needs all data which !could! have equal keys together on one node</li>
+                        <li>Example query</li>
+                        <li>After organizing data one can use every ordinary join algorithm, e.g. SortMergeJoin, HashJoin</li>
+                        <li>Shuffles are expensive because they include disk write and reads</li>
+                        <li>To be avoided, how to do an n-ary join in Spark?</li>
+                    </ul>
                 </aside>
             </section>
             <section>
                 <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
-                Hypecube shuffle explained using triangle query as example
-                proven to be optimal in terms of communication cost in MapReduce like systems
+                <div class="box">
+                    <div class="box-50">
+                        <h4>Idea</h4>
+                        <ul>
+                            <li>Organize <i>p</i> workers in an hypercube</li>
+                            <li>one dimension per variable <i>i</i></li>
+                            <li>configurable <i>k<sub>i</sub></i> size per dimension</li>
+                            <li>such that <i>p = &#x220F;<sub>i</sub> k<sub>i</sub></i></li>
+                        </ul>
+                    </div>
+                    <div class="box-50">
+                        <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
+                        <!--                        <img src="img/triangle.svg" alt="depiction of triangle query"/>-->
+                        <img src="img/hypercube.svg" alt="depiction of hypercube for triangle query"/>
+                    </div>
+                </div>
             </section>
             <section>
-                <h3>But is optimal also good?</h3>
-                myria scaling, practical system
+                <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
+                <div class="box">
+                    <div class="box-50">
+                        <h4>Idea</h4>
+                        <ul>
+                            <!--                            TODO html for ...-->
+                            <li>each worker is identified by a coordinate <i>(x<sub>0</sub>, ..., x<sub>i - 1</sub></i></li>
+                            <li>for each tuple hash the available attributes to get a partial coordinate</li>
+                            <li>send the tuple to each node matching the partial variable</li>
+                        </ul>
+                    </div>
+                    <div class="box-50">
+                        <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
+                        Example tables
+                        one example tuple considered
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>How well does HC scale?</h3>
+                <!--                TODO remove slide? -->
+                <ul>
+                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>
+                    <li>speedup of of 8 for 64 workers over 2 workers for triangle query</li>
+                    <li>Hypercube shuffle has been proven to be communication optimal by Afrati and Ullman 2010</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>the question is not easy to answer</li>
+                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>
+                        <li>only one implementation we are aware of</li>
+                        <li>Myria scaling</li>
+                        <li>Triangle is probably the best</li>
+                        <li>That raises our next question:</li>
+                    </ul>
+
+                </aside>
             </section>
             <section>
                 <h3>Why does Hypercube shuffle not scale?</h3>
-                Analysis of duplication
-                main result goes towards a full broadcast,
-                this is intuitively not unexpected - small world principle
+                <img src="img/hc-scaling.svg" alt="Barchart showing duplication over bigger queries."
+                <ul>
+                    <li>converges to full broadcast for bigger queries</li>
+                    <li>intuitively this can be explained by the small world principle</li>
+                </ul>
             </section>
             <section>
-                <h3>Caching the edge table on every node</h3>
-                No communication necessary (could easily beat HC after one query because it is not query specific)
-                Only one relationship needs to be shared - the edge relationship, which has only two attributes
-                We optimize for memory efficiency by using CSR then most graphs fit into main memory - good idea to say this in front of
-                this audience?
+                <h3>Caching the edge table on all workers</h3>
 
-                parallization via logical partitioning: each worker has the full dataset but works only on parts of it (depending on the
-                query)
+                <ul>
+                    <li>no query specific communication</li>
+                    <li>only the edge relationship needs to be shared</li>
+                    <li>the relationship has only two integer attributes</li>
+                    <li>CSR format optimizes memory footprint</li>
+                </ul>
+                <ul>
+                    <li>
+                        parallelization via logical partitioning: full dataset is on each worker but it works only
+                        on parts of it
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>If HC is optimal but converges to a full broadcast, why not cache the whole dataset on all workers
+                            directly?</li>
+                        <li>That is query independent.</li>
+                        <li>Hence, can be reused and then easily beats HC shuffle after 2 or 3 different queries</li>
+                        <li>How much data needs to be cached for arbritrary graph patters?</li>
+                        <li>Only one relationship of two integer attributes</li>
+                        <li>Can be compressed by CSR "compressed sparse row" format</li>
+                        <li>How does parallelization work then?</li>
+                        <li>logical partitioning: you have all data but you consider only parts of it</li>
+                    </ul>
+                </aside>
             </section>
             <section>
                 <h3>Considered logical partitionings</h3>
                 HC itself, mainly to develop a better understanding of it's scaling behaviour and to see if the graph/ all data cached
                 angle allows further optimizations
+                it's also pushed down into the HC shuffle
 
                 simple distribution on the first attribute to bind?
-                  pattern used for HP computing to parallelize search tree computations - often combined with work stealing,
-                  in spark we could use adative queries (by ???intel???/???microsoft???)
+                pattern used for HP computing to parallelize search tree computations - often combined with work stealing,
+                in spark we could use adative queries (by ???intel???/???microsoft???)
             </section>
         </section>
         <section data-title="Conclusion">
