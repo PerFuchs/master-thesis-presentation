@@ -1,0 +1,63 @@
+/* Header style */
+.reveal h3 {
+    margin-bottom: 5%;
+}
+
+.reveal h5 {
+    margin-bottom: 5px;
+}
+
+/* Title bar style*/
+#chapter-header {
+    background: #fff;
+    border: none;
+    border-bottom: 5px solid #ccc;
+}
+
+#chapter-header p {
+    color: #c00;
+}
+
+/* Enumeration style */
+.reveal li.space-below {
+    padding-bottom: 5%;
+}
+
+
+/* Box model */
+.reveal .box {
+    display: flex;
+    flex-direction: row;
+}
+
+.reveal .box .col-50 {
+    width: 50%;
+}
+
+.reveal .box .col-60  {
+    width: 60%;
+}
+
+.reveal .box .col-40 {
+    width: 40%;
+}
+
+
+/* List dash style*/
+.reveal ul {
+    list-style-type: none;
+}
+
+.reveal ul ul {
+    list-style-type: none;
+}
+
+.reveal ul ul ul {
+    list-style-type: none;
+}
+
+.reveal ul li:before {
+    content: '\2014';
+    position: absolute;
+    margin-left: -35px;
+}
