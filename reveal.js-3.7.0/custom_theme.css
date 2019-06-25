@@ -34,6 +34,10 @@
     width: 50%;
 }
 
+.reveal .box .col-30 {
+    width: 30%;
+}
+
 .reveal .box .margin-10 {
     margin-right: 10%;
 }
@@ -63,4 +67,16 @@
     content: '\2014';
     position: absolute;
     margin-left: -35px;
+}
+
+.color-blue {
+    color: blue;
+}
+
+.color-red {
+    color: red;
+}
+
+.color-green {
+    color: green;
 }
