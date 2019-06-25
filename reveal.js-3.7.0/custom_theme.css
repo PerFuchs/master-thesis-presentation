@@ -34,6 +34,9 @@
     width: 50%;
 }
 
+.reveal .box .margin-10 {
+    margin-right: 10%;
+}
 .reveal .box .col-60  {
     width: 60%;
 }

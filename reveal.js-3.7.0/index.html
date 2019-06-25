@@ -36,8 +36,14 @@
             </section>
             <section>
                 <h3>Cyclic queries in Graph-pattern matching pose new challenges to relational engines</h3>
-                <img src="img/triangle.svg" alt="Depiction of triangle query"/>
-                <img src="img/triangle-binary-joins.svg" alt="Depiction of bushy binary join tree"/>
+                <div class="box">
+                    <div class="col-50">
+                        <img height="300px" src="img/triangle.svg" alt="Depiction of triangle query"/>
+                    </div>
+                    <div class="col-50">
+                        <img height="300px" src="img/triangle-binary-joins.svg" alt="Depiction of bushy binary join tree"/>
+                    </div>
+                </div>
                 <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
                 <aside class="notes">
                     <ul>
@@ -54,6 +60,7 @@
                         <li>solved by the join plan depicted below</li>
                         <li>point out sizes of intermediary resutls O(N<sup>2</sup>)</li>
                         <li>compare to end result size O(N<sup>3/2</sup>)</li>
+                        <li>this is generalizable to all queries by the so called AGM bound</li>
                         <li>Explain datalog query: one variable per vertice, one relationship per edge (all for the edge relationship -
                             alias) with attributes according to the edges
                         </li>
@@ -62,9 +69,20 @@
             </section>
             <section>
                 <h3>Why are cyclic pattern important?</h3>
-                <img src="img/kite.svg" alt="Depiction of kite query">
-                <img src="img/diamond.svg" alt="Depiction of diamond query">
-                <img src="img/5-cycle.svg" alt="Depiction of 5 cycle">
+                <div class="box">
+                    <div>
+                        <h4>Facebook friends</h4>
+                        <img height="300px" src="img/kite.svg" alt="Depiction of kite query">
+                    </div>
+                    <div>
+                        <h4>Twitter followers</h4>
+                        <img height="300px" src="img/diamond.svg" alt="Depiction of diamond query">
+                    </div>
+                    <div>
+                        <h4>Bank fraud</h4>
+                        <img height="300px" src="img/5-cycle.svg" alt="Depiction of 5 cycle">
+                    </div>
+                </div>
                 <aside class="notes">
                     <p>the kite: an example for friends recommendation, see two triangles</p>
                     <p>diamond: used by twitter in production to recommend people to follow</p>
@@ -73,7 +91,7 @@
             </section>
             <section>
                 <h3>Worst-case optimal joins to rescue</h3>
-                <img src="img/triangle.svg" alt="depiction of triangle query">
+                <img height="300px" src="img/triangle.svg" alt="depiction of triangle query">
                 <ul>
                     <li>Idea: build the join by <i>variable-at-a-time</i></li>
                     <li>no intermediary results</li>
@@ -170,7 +188,7 @@
             <section>
                 <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
                 <div class="box">
-                    <div class="box-50">
+                    <div class="box-50 margin-10" >
                         <h4>Idea</h4>
                         <ul>
                             <li>Organize <i>p</i> workers in an hypercube</li>
@@ -179,10 +197,11 @@
                             <li>such that <i>p = &#x220F;<sub>i</sub> k<sub>i</sub></i></li>
                         </ul>
                     </div>
-                    <div class="box-50">
+
+                    <div class="box-40">
                         <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
                         <!--                        <img src="img/triangle.svg" alt="depiction of triangle query"/>-->
-                        <img src="img/hypercube.svg" alt="depiction of hypercube for triangle query"/>
+                        <img height="400px" src="img/hypercube.svg" alt="depiction of hypercube for triangle query"/>
                     </div>
                 </div>
             </section>
@@ -193,9 +212,9 @@
                         <h4>Idea</h4>
                         <ul>
                             <!--                            TODO html for ...-->
-                            <li>each worker is identified by a coordinate <i>(x<sub>0</sub>, ..., x<sub>i - 1</sub></i></li>
-                            <li>for each tuple hash the available attributes to get a partial coordinate</li>
-                            <li>send the tuple to each node matching the partial variable</li>
+                            <li>coordinate <i>(x<sub>0</sub>, ..., x<sub>i - 1</sub>)</i> per worker</li>
+                            <li>hash tuple values to coordinate space</li>
+                            <li>send tuple to all workers matching their coordinate</li>
                         </ul>
                     </div>
                     <div class="box-50">
@@ -227,7 +246,7 @@
             </section>
             <section>
                 <h3>Why does Hypercube shuffle not scale?</h3>
-                <img src="img/hc-scaling.svg" alt="Barchart showing duplication over bigger queries."
+                <img src="img/hc-scaling.svg" alt="Barchart showing duplication over bigger queries."/>
                 <ul>
                     <li>converges to full broadcast for bigger queries</li>
                     <li>intuitively this can be explained by the small world principle</li>
@@ -241,8 +260,6 @@
                     <li>only the edge relationship needs to be shared</li>
                     <li>the relationship has only two integer attributes</li>
                     <li>CSR format optimizes memory footprint</li>
-                </ul>
-                <ul>
                     <li>
                         parallelization via logical partitioning: full dataset is on each worker but it works only
                         on parts of it
@@ -264,13 +281,25 @@
             </section>
             <section>
                 <h3>Considered logical partitionings</h3>
-                HC itself, mainly to develop a better understanding of it's scaling behaviour and to see if the graph/ all data cached
-                angle allows further optimizations
-                it's also pushed down into the HC shuffle
-
-                simple distribution on the first attribute to bind?
-                pattern used for HP computing to parallelize search tree computations - often combined with work stealing,
-                in spark we could use adative queries (by ???intel???/???microsoft???)
+                <ul>
+                    <li>Hypercube</li>
+                    <li>Simple distribution of the first attribute</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>HC itself</li>
+                        <li>get a better understanding of its scaling</li>
+                        <li>evaluate if the new angle of having all data and being able to push it into the WCOJ enables better scaling</li>
+                        <li>Another idea,</li>
+                        <ul>
+                            <li>WCOJ bind variables in a fixed global order, e.g. a, b, c for the triangle</li>
+                            <li>partitiong the first variable</li>
+                            <li>sounds simple but this is how searching a tree is parallized in high-performance computing</li>
+                            <li>biggest problem skew in the data</li>
+                            <li>in high-performance computing: use of workstealing -> adaptive query processing in Spark by Intel</li>
+                        </ul>
+                    </ul>
+                </aside>
             </section>
         </section>
         <section data-title="Conclusion">
