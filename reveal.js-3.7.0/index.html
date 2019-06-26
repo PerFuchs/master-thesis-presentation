@@ -274,25 +274,25 @@
                     </div>
                 </div>
             </section>
-            <section>
-                <h3>How well does HC scale?</h3>
-                <!--                TODO remove slide? -->
-                <ul>
-                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>
-                    <li>speedup of of 16 for 64 workers for triangle query</li>
-                </ul>
-                <aside class="notes">
-                    <ul>
-                        <li>the question is not easy to answer</li>
-                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>
-                        <li>only one implementation we are aware of</li>
-                        <li>Myria scaling</li>
-                        <li>Triangle is probably the best</li>
-                        <li>That raises our next question:</li>
-                    </ul>
+<!--            <section>-->
+<!--                <h3>How well does HC scale?</h3>-->
+<!--                &lt;!&ndash;                TODO remove slide? &ndash;&gt;-->
+<!--                <ul>-->
+<!--                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>-->
+<!--                    <li>speedup of of 16 for 64 workers for triangle query</li>-->
+<!--                </ul>-->
+<!--                <aside class="notes">-->
+<!--                    <ul>-->
+<!--                        <li>the question is not easy to answer</li>-->
+<!--                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>-->
+<!--                        <li>only one implementation we are aware of</li>-->
+<!--                        <li>Myria scaling</li>-->
+<!--                        <li>Triangle is probably the best</li>-->
+<!--                        <li>That raises our next question:</li>-->
+<!--                    </ul>-->
 
-                </aside>
-            </section>
+<!--                </aside>-->
+<!--            </section>-->
             <section>
                 <h3>Why does Hypercube shuffle not scale?</h3>
                 <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
