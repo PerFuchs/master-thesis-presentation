@@ -175,7 +175,7 @@
                         <div class="col-50">
                             <table>
                                 <tr>
-                                    <th >b</th>
+                                    <th>b</th>
                                     <th>c</th>
                                 </tr>
                                 <tr>
@@ -250,7 +250,7 @@
                         <div class="col-50">
                             <table>
                                 <tr>
-                                    <th >b</th>
+                                    <th>b</th>
                                     <th>c</th>
                                 </tr>
                                 <tr>
@@ -438,15 +438,16 @@
             </section>
             <section>
                 <h3>Caching the edge table on all workers</h3>
+                <div class="box">
+                    <div class="col-50">
+                        <img height="400px" src="img/hc-configuration.svg"/>
+                    </div>
+                    <div class="col-50">
+                        <img height="400px" src="img/cached-configuartion.svg"/>
+                    </div>
+                </div>
                 <ul>
-                    <li>no query specific communication</li>
-                    <li>only the edge relationship needs to be shared</li>
-                    <li>the relationship has only two integer attributes</li>
                     <li>CSR format optimizes memory footprint</li>
-                    <li>
-                        parallelization via logical partitioning: full dataset is on each worker but it works only
-                        on parts of it
-                    </li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -464,8 +465,12 @@
                 </aside>
             </section>
             <section>
-                <h3>Considered logical partitionings</h3>
+                <h3>Parallelization via logical partitionings</h3>
                 <ul>
+                    <li>
+                        parallelization via logical partitioning: full dataset is on each worker but it works only
+                        on parts of it
+                    </li>
                     <li>Hypercube</li>
                     <li>Simple distribution of the first attribute</li>
                 </ul>
