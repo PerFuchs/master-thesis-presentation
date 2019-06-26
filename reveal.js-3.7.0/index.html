@@ -99,7 +99,8 @@
                     <li>Idea: build the join by <i>variable-at-a-time</i></li>
                     <li>no intermediary results</li>
                     <li>high performance for graph-pattern matching is well established: [1] 2015, [2] 2015,
-                        [3] 2017, [4] 2018</li>
+                        [3] 2017, [4] 2018
+                    </li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -143,16 +144,15 @@
                 <img src="img/broadcast-hash-join.png"/>
                 <aside class="notes">
                     <ul>
-                        <li>Note that Spark is an system which uses the Bulksynchrounous model like MapReduce (one map step (no
-                            communication),
-                            one reduce step (communication by data redistribution), and so forth)
-                        </li>
-                        <li>Spark organizes data in resilient distribute datasets</li>
+                        <li>Spark organizes data in resilient distributed datasets</li>
                         <li>These are distributed onto the workers by a function chosen by a programmer, e.g. by an attribute</li>
+                        <li>each worker considers only it's own tuples</li>
+                        <li>communication is done via shuffles, repartitioning of the data</li>
+                        <li>shuffles are expensive due to disk write and reads</li>
+                        <li>computations are organized by interleaving shuffles and local computation (bulk synchrounous model</li>
+                        <li>Explain join going on a (smaller) with b (large)</li>
                         <li>A join needs all data which !could! have equal keys together on one node</li>
-                        <li>Example query</li>
                         <li>After organizing data one can use every ordinary join algorithm, e.g. SortMergeJoin, HashJoin</li>
-                        <li>Shuffles are expensive because they include disk write and reads</li>
                         <li>To be avoided, how to do an n-ary join in Spark?</li>
                     </ul>
                 </aside>
@@ -160,7 +160,7 @@
             <section>
                 <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
                 <div class="box">
-                    <div class="col-50 margin-10" >
+                    <div class="col-50 margin-10">
                         <h4>Idea</h4>
                         <ul>
                             <li>Organize <i>p</i> workers in an hypercube</li>
@@ -189,31 +189,76 @@
                         <div class="box">
                             <div class="col-30">
                                 <table>
-                                    <tr><th>a</th><th>b</th></tr>
-                                    <tr><td class="color-red">1</td><td class="color-red">2</td></tr>
-                                    <tr><td>2</td><td>3</td></tr>
-                                    <tr><td>2</td><td>4</td></tr>
-                                    <tr><td>3</td><td>1</td></tr>
+                                    <tr>
+                                        <th>a</th>
+                                        <th>b</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="color-red">1</td>
+                                        <td class="color-red">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>1</td>
+                                    </tr>
                                 </table>
                                 <p class="color-red">(2, 0, *)</p>
                             </div>
                             <div class="col-30">
                                 <table>
-                                    <tr><th>b</th><th>c</th></tr>
-                                    <tr><td>1</td><td>2</td></tr>
-                                    <tr><td class="color-blue">2</td><td class="color-blue">3</td></tr>
-                                    <tr><td>2</td><td>4</td></tr>
-                                    <tr><td>3</td><td>1</td></tr>
+                                    <tr>
+                                        <th>b</th>
+                                        <th>c</th>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="color-blue">2</td>
+                                        <td class="color-blue">3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>1</td>
+                                    </tr>
                                 </table>
                                 <p class="color-blue">(*, 0, 1)</p>
                             </div>
                             <div class="col-30">
                                 <table>
-                                    <tr><th>c</th><th>a</th></tr>
-                                    <tr><td>1</td><td>2</td></tr>
-                                    <tr><td>2</td><td>3</td></tr>
-                                    <tr><td>2</td><td>4</td></tr>
-                                    <tr><td class="color-green">3</td><td class="color-green">1</td></tr>
+                                    <tr>
+                                        <th>c</th>
+                                        <th>a</th>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="color-green">3</td>
+                                        <td class="color-green">1</td>
+                                    </tr>
                                 </table>
                                 <p class="color-green">(2, *, 1)</p>
                             </div>
@@ -232,8 +277,7 @@
                 <!--                TODO remove slide? -->
                 <ul>
                     <li>implementation by Chu et al. 2015 in <i>Myria</i></li>
-                    <li>speedup of of 8 for 64 workers over 2 workers for triangle query</li>
-                    <li>Hypercube shuffle has been proven to be communication optimal by Afrati and Ullman 2010</li>
+                    <li>speedup of of 16 for 64 workers for triangle query</li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -260,7 +304,6 @@
             </section>
             <section>
                 <h3>Caching the edge table on all workers</h3>
-
                 <ul>
                     <li>no query specific communication</li>
                     <li>only the edge relationship needs to be shared</li>
@@ -274,7 +317,8 @@
                 <aside class="notes">
                     <ul>
                         <li>If HC is optimal but converges to a full broadcast, why not cache the whole dataset on all workers
-                            directly?</li>
+                            directly?
+                        </li>
                         <li>That is query independent.</li>
                         <li>Hence, can be reused and then easily beats HC shuffle after 2 or 3 different queries</li>
                         <li>How much data needs to be cached for arbritrary graph patters?</li>
@@ -308,14 +352,6 @@
                 </aside>
             </section>
         </section>
-        <section data-title="Conclusion">
-            <section>
-                <h3>What has been done so far?</h3>
-                <img src="img/results.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
-                <aside class="notes">
-                </aside>
-            </section>
-        </section>
         <section data-title="">
             <section data-no-title="true">
                 <h2>Where to find my work?</h2>
@@ -330,11 +366,19 @@
         </section>
         <section data-title="Backup slides">
             <section>
+                <h3>Spark vs WCOJ vs GraphWCOJ</h3>
+                <img src="img/results-1.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
+                <img src="img/results-2.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
+                <aside class="notes">
+                </aside>
+            </section>
+            <section>
                 <h3>Graph sizes in academia</h3>
             </section>
             <section>
                 <h3>List of datasets</h3>
             </section>
+
         </section>
     </div>
 </div>
