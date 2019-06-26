@@ -83,7 +83,7 @@
                         <img height="300px" src="img/5-cycle.svg" alt="Depiction of 5 cycle">
                     </div>
                 </div>
-<!--                TODO citations -->
+                <!--                TODO citations -->
                 <aside class="notes">
                     <p>the kite: an example for friends recommendation, see two triangles</p>
                     <p>diamond: used by twitter in production to recommend people to follow</p>
@@ -102,7 +102,7 @@
                     <li>high performance for graph-pattern matching is well established: [1] 2015, [2] 2015,
                         [3] 2017, [4] 2018
                     </li>
-<!--                    TODO citations -->
+                    <!--                    TODO citations -->
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -143,7 +143,139 @@
         <section data-title="Building a scalable WCOJ in Spark">
             <section>
                 <h3>Distribution of existing Spark joins</h3>
-                <img src="img/broadcast-hash-join.png"/>
+                <div class="box">
+                    <div class="col-60">
+                        <img height="500px" src="img/spark-background.svg"/>
+                    </div>
+                    <div class="col-40 box">
+                        <div class="col-50">
+                            <table>
+                                <tr>
+                                    <th>a</th>
+                                    <th>b</th>
+                                </tr>
+                                <tr>
+                                    <td class="color-red">1</td>
+                                    <td class="color-red">2</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-green">2</td>
+                                    <td class="color-green">3</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-green">2</td>
+                                    <td class="color-green">4</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-red">3</td>
+                                    <td class="color-red">1</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-50">
+                            <table>
+                                <tr>
+                                    <th >b</th>
+                                    <th>c</th>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">1</td>
+                                    <td class="color-blue">2</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">2</td>
+                                    <td class="color-blue">3</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">3</td>
+                                    <td class="color-blue">1</td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Spark organizes data in resilient distributed datasets</li>
+                        <li>These are distributed onto the workers by a function chosen by a programmer, e.g. by an attribute</li>
+                        <li>each worker considers only it's own tuples</li>
+                        <li>communication is done via shuffles, repartitioning of the data</li>
+                        <li>shuffles are expensive due to disk write and reads</li>
+                        <li>computations are organized by interleaving shuffles and local computation (bulk synchrounous model</li>
+                        <li>Explain join going on a (smaller) with b (large)</li>
+                        <li>A join needs all data which !could! have equal keys together on one node</li>
+                        <li>After organizing data one can use every ordinary join algorithm, e.g. SortMergeJoin, HashJoin</li>
+                        <li>To be avoided, how to do an n-ary join in Spark?</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h3>Distribution of existing Spark joins</h3>
+                <div class="box">
+                    <div class="col-60">
+                        <img height="500px" src="img/spark-background.svg"/>
+                    </div>
+                    <div class="col-40 box">
+                        <div class="col-50">
+                            <table>
+                                <tr>
+                                    <th>a</th>
+                                    <th>b</th>
+                                </tr>
+                                <tr>
+                                    <td class="color-purple">1</td>
+                                    <td class="color-purple">2</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-orange">2</td>
+                                    <td class="color-orange">3</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-purple">2</td>
+                                    <td class="color-purple">4</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-orange">3</td>
+                                    <td class="color-orange">1</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-50">
+                            <table>
+                                <tr>
+                                    <th >b</th>
+                                    <th>c</th>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">1</td>
+                                    <td class="color-blue">2</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">2</td>
+                                    <td class="color-blue">3</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <td class="color-blue">3</td>
+                                    <td class="color-blue">1</td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
                 <aside class="notes">
                     <ul>
                         <li>Spark organizes data in resilient distributed datasets</li>
@@ -274,25 +406,25 @@
                     </div>
                 </div>
             </section>
-<!--            <section>-->
-<!--                <h3>How well does HC scale?</h3>-->
-<!--                &lt;!&ndash;                TODO remove slide? &ndash;&gt;-->
-<!--                <ul>-->
-<!--                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>-->
-<!--                    <li>speedup of of 16 for 64 workers for triangle query</li>-->
-<!--                </ul>-->
-<!--                <aside class="notes">-->
-<!--                    <ul>-->
-<!--                        <li>the question is not easy to answer</li>-->
-<!--                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>-->
-<!--                        <li>only one implementation we are aware of</li>-->
-<!--                        <li>Myria scaling</li>-->
-<!--                        <li>Triangle is probably the best</li>-->
-<!--                        <li>That raises our next question:</li>-->
-<!--                    </ul>-->
+            <!--            <section>-->
+            <!--                <h3>How well does HC scale?</h3>-->
+            <!--                &lt;!&ndash;                TODO remove slide? &ndash;&gt;-->
+            <!--                <ul>-->
+            <!--                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>-->
+            <!--                    <li>speedup of of 16 for 64 workers for triangle query</li>-->
+            <!--                </ul>-->
+            <!--                <aside class="notes">-->
+            <!--                    <ul>-->
+            <!--                        <li>the question is not easy to answer</li>-->
+            <!--                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>-->
+            <!--                        <li>only one implementation we are aware of</li>-->
+            <!--                        <li>Myria scaling</li>-->
+            <!--                        <li>Triangle is probably the best</li>-->
+            <!--                        <li>That raises our next question:</li>-->
+            <!--                    </ul>-->
 
-<!--                </aside>-->
-<!--            </section>-->
+            <!--                </aside>-->
+            <!--            </section>-->
             <section>
                 <h3>Why does Hypercube shuffle not scale?</h3>
                 <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
