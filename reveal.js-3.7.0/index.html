@@ -35,13 +35,13 @@
                 <h5>Master thesis in Computer Science</h5>
             </section>
             <section>
-                <h3>Cyclic queries in Graph-pattern matching pose new challenges to relational engines</h3>
+                <h3>Cyclic queries in graph-pattern matching pose new challenges to relational engines</h3>
                 <div class="box">
                     <div class="col-50">
-                        <img height="300px" src="img/triangle.svg" alt="Depiction of triangle query"/>
+                        <img height="350px" src="img/triangle.svg" alt="Depiction of triangle query"/>
                     </div>
                     <div class="col-50">
-                        <img height="300px" src="img/triangle-binary-joins.svg" alt="Depiction of bushy binary join tree"/>
+                        <img height="350px" src="img/triangle-binary-joins.svg" alt="Depiction of bushy binary join tree"/>
                     </div>
                 </div>
                 <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
@@ -91,13 +91,13 @@
                 </aside>
             </section>
             <section>
-                <h3>Worst-case optimal joins to rescue</h3>
+                <h3>Worst-case optimal joins to the rescue</h3>
                 <img height="200px" src="img/triangle.svg" alt="depiction of triangle query">
                 <ul>
                     <li>developed 2012 and proven to be worst-case optimal, e.g. for triangles in
                         O(N<sup>3/2</sup>)
                     </li>
-                    <li>Idea: build the join by <i>variable-at-a-time</i></li>
+                    <li>Idea: build the join by <i>variable-at-a-time</i> approach</li>
                     <li>no intermediary results</li>
                     <li>high performance for graph-pattern matching is well established: [1] 2015, [2] 2015,
                         [3] 2017, [4] 2018
@@ -113,10 +113,10 @@
                 </aside>
             </section>
             <section>
-                <h3>Our contributions</h3>
+                <h3>Research Questions</h3>
                 <ol>
-                    <li>integrate a scalable, parallel WCOJ in Spark</li>
-                    <li>Specialize WCOJ to Graphs (not in this presentation)</li>
+                    <li>How well do WCOJ’s scale in Spark used for graph pattern matching?</li>
+                    <li>Can we gain performance in WCOJ’s by specializing them to graph pattern matching? (not in this presentation)</li>
                 </ol>
                 <aside class="notes">
                     <ul>
@@ -142,7 +142,7 @@
         </section>
         <section data-title="Building a scalable WCOJ in Spark">
             <section>
-                <h3>Distribution of existing Spark joins</h3>
+                <h3>Background: Spark joins</h3>
                 <div class="box">
                     <div class="col-60">
                         <img height="500px" src="img/spark-background.svg"/>
@@ -217,7 +217,7 @@
                 </aside>
             </section>
             <section>
-                <h3>Distribution of existing Spark joins</h3>
+                <h3>Background: Spark joins</h3>
                 <div class="box">
                     <div class="col-60">
                         <img height="500px" src="img/spark-background.svg"/>
@@ -297,8 +297,8 @@
                     <div class="col-50 margin-10">
                         <h4>Idea</h4>
                         <ul>
-                            <li>Organize <i>p</i> workers in an hypercube</li>
-                            <li>one dimension per variable <i>i</i></li>
+                            <li>Organize <i>p</i> workers in a hypercube</li>
+                            <li>one dimension per variable</li>
                             <li>configurable <i>k<sub>i</sub></i> size per dimension</li>
                             <li>such that <i>p = &#x220F;<sub>i</sub> k<sub>i</sub></i></li>
                         </ul>
@@ -472,7 +472,7 @@
                         on parts of it
                     </li>
                     <li>Hypercube</li>
-                    <li>Simple distribution of the first attribute</li>
+                    <li>partition on the first attribute to bind by the WCOJ</li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -497,8 +497,33 @@
                 <h3>https://github.com/PerFuchs</h3>
                 <p>Also, I'm looking for PhD opportunities or challenging positions in industry.</p>
             </section>
-        </section>
-        <section>
+            <section>
+                <h3>Research Questions</h3>
+                <ol>
+                    <li>How well do WCOJ’s scale in Spark used for graph pattern matching?</li>
+                    <li>Can we gain performance in WCOJ’s by specializing them to graph pattern matching? (not in this presentation)</li>
+                </ol>
+                <aside class="notes">
+                    <ul>
+                        <li>build a scalable WCOJ in Spark</li>
+                        <ul>
+                            <li>Spark is well accepted in industry and there is currently no
+                                openly accessible implementation of a WCOJ in a widely used system
+                            </li>
+                            <li>Neo4J currently builds a Cypher frontend for Spark (stretch goal)</li>
+                            <li>Well suited for long running analytical queries with its fault tolerance and
+                                ability to run on many nodes
+                            </li>
+                        </ul>
+                        <li>Superiority over binary joins was ALWAYS - in every single paper - shown for graphs</li>
+                        <ul>
+                            <li>but specialization has not been considered</li>
+                            <li>not in this talk but feel free to ask</li>
+                            <li>We do: specialization to self joins on tables with two attributes, CSR and more</li>
+                        </ul>
+                    </ul>
+                </aside>
+            </section>
             <section data-no-title="true">
                 <h2>References</h2>
             </section>
