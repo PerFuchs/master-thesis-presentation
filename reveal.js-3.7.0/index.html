@@ -116,180 +116,45 @@
                 </aside>
             </section>
         </section>
-        <section data-title="Building a scalable WCOJ in Spark">
+        <section data-title="Designing a scalable WCOJ in Spark">
             <section>
-                <h3>Background: Spark joins</h3>
-                <div class="box">
-                    <div class="col-60">
-                        <img height="500px" src="img/spark-background.svg"/>
-                    </div>
-                    <div class="col-40 box">
-                        <div class="col-50">
-                            <table>
-                                <tr>
-                                    <th>a</th>
-                                    <th>b</th>
-                                </tr>
-                                <tr>
-                                    <td class="color-red">1</td>
-                                    <td class="color-red">2</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-green">2</td>
-                                    <td class="color-green">3</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-green">2</td>
-                                    <td class="color-green">4</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-red">3</td>
-                                    <td class="color-red">1</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-50">
-                            <table>
-                                <tr>
-                                    <th>b</th>
-                                    <th>c</th>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">1</td>
-                                    <td class="color-blue">2</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">2</td>
-                                    <td class="color-blue">3</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>4</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">3</td>
-                                    <td class="color-blue">1</td>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                    </div>
-                </div>
-
+                <h3>Background: Spark</h3>
+                <ul>
+                    <li>Spark distributes data over workers</li>
+                    <li>computation follows the <i>Bulk synchronous parallel model</i> (local computations, shuffle, local
+                        computations, etc)</li>
+                    <li>joins work by shuffling the data such that the distribution allows local join algorithms</li>
+                </ul>
                 <aside class="notes">
                     <ul>
-                        <li>Spark organizes data in resilient distributed datasets</li>
-                        <li>These are distributed onto the workers by a function chosen by a programmer, e.g. by an attribute</li>
-                        <li>each worker considers only it's own tuples</li>
-                        <li>communication is done via shuffles, repartitioning of the data</li>
+                        <li>distribution</li>
+                        <li>Bulk synchronous model</li>
                         <li>shuffles are expensive due to disk write and reads</li>
-                        <li>computations are organized by interleaving shuffles and local computation (bulk synchrounous model</li>
-                        <li>Explain join going on a (smaller) with b (large)</li>
-                        <li>A join needs all data which !could! have equal keys together on one node</li>
-                        <li>After organizing data one can use every ordinary join algorithm, e.g. SortMergeJoin, HashJoin</li>
                         <li>To be avoided, how to do an n-ary join in Spark?</li>
                     </ul>
                 </aside>
             </section>
             <section>
-                <h3>Background: Spark joins</h3>
-                <div class="box">
-                    <div class="col-60">
-                        <img height="500px" src="img/spark-background.svg"/>
-                    </div>
-                    <div class="col-40 box">
-                        <div class="col-50">
-                            <table>
-                                <tr>
-                                    <th>a</th>
-                                    <th>b</th>
-                                </tr>
-                                <tr>
-                                    <td class="color-purple">1</td>
-                                    <td class="color-purple">2</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-orange">2</td>
-                                    <td class="color-orange">3</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-purple">2</td>
-                                    <td class="color-purple">4</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-orange">3</td>
-                                    <td class="color-orange">1</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-50">
-                            <table>
-                                <tr>
-                                    <th>b</th>
-                                    <th>c</th>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">1</td>
-                                    <td class="color-blue">2</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">2</td>
-                                    <td class="color-blue">3</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>4</td>
-                                </tr>
-                                <tr>
-                                    <td class="color-blue">3</td>
-                                    <td class="color-blue">1</td>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <aside class="notes">
-                    <ul>
-                        <li>Spark organizes data in resilient distributed datasets</li>
-                        <li>These are distributed onto the workers by a function chosen by a programmer, e.g. by an attribute</li>
-                        <li>each worker considers only it's own tuples</li>
-                        <li>communication is done via shuffles, repartitioning of the data</li>
-                        <li>shuffles are expensive due to disk write and reads</li>
-                        <li>computations are organized by interleaving shuffles and local computation (bulk synchrounous model</li>
-                        <li>Explain join going on a (smaller) with b (large)</li>
-                        <li>A join needs all data which !could! have equal keys together on one node</li>
-                        <li>After organizing data one can use every ordinary join algorithm, e.g. SortMergeJoin, HashJoin</li>
-                        <li>To be avoided, how to do an n-ary join in Spark?</li>
-                    </ul>
-                </aside>
-            </section>
-            <section>
-                <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
+                <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50 margin-10">
                         <h4>Idea</h4>
                         <ul>
-                            <li>Organize <i>p</i> workers in a hypercube</li>
+                            <li>organize <i>p</i> workers in a hypercube</li>
                             <li>one dimension per variable</li>
                             <li>configurable <i>k<sub>i</sub></i> size per dimension</li>
                             <li>such that <i>p = &#x220F;<sub>i</sub> k<sub>i</sub></i></li>
+                            <li>proven to be communication optimal</li>
                         </ul>
                     </div>
-
                     <div class="col-40">
                         <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
-
-                        <!--                        <img src="img/triangle.svg" alt="depiction of triangle query"/>-->
                         <img height="400px" src="img/hypercube.svg" alt="depiction of hypercube for triangle query"/>
                     </div>
                 </div>
             </section>
             <section>
-                <h3>Hypercube shuffle: n-ary joins in 1 shuffle round</h3>
+                <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50">
                         <img height="400px" src="img/hypercube-example.svg" alt="depiction of hypercube for triangle query"/>
@@ -381,31 +246,29 @@
                         </div>
                     </div>
                 </div>
+                <aside class="notes">
+                    <li>duplication!</li>
+                </aside>
             </section>
-            <!--            <section>-->
-            <!--                <h3>How well does HC scale?</h3>-->
-            <!--                &lt;!&ndash;                TODO remove slide? &ndash;&gt;-->
-            <!--                <ul>-->
-            <!--                    <li>implementation by Chu et al. 2015 in <i>Myria</i></li>-->
-            <!--                    <li>speedup of of 16 for 64 workers for triangle query</li>-->
-            <!--                </ul>-->
-            <!--                <aside class="notes">-->
-            <!--                    <ul>-->
-            <!--                        <li>the question is not easy to answer</li>-->
-            <!--                        <li>there is a lot of duplication going on which is query dependend and not trivial to characterize</li>-->
-            <!--                        <li>only one implementation we are aware of</li>-->
-            <!--                        <li>Myria scaling</li>-->
-            <!--                        <li>Triangle is probably the best</li>-->
-            <!--                        <li>That raises our next question:</li>-->
-            <!--                    </ul>-->
-
-            <!--                </aside>-->
-            <!--            </section>-->
             <section>
-                <h3>Why does Hypercube shuffle not scale?</h3>
-                <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
+                <h3>Hypercube shuffle converges to broadcasting for larger queries</h3>
+                <div class="box">
+                    <div class="col-50">
+                        <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
+                    </div>
+                    <div class="col-50">
+                        <ul>
+                            <li>analysis by theoretic estimation and simulation</li>
+                            <li>a lot of duplicated work</li>
+                            <li>not scalable in query size</li>
+                            <li>not scalable in numbers of workers</li>
+                            <li>although being optimal</li>
+                        </ul>
+                    </div>
+                </div>
                 <aside class="notes">
                     <ul>
+                        <li>study of HC's scalability by us in theory and by simulation</li>
                         <li>converges to full broadcast for bigger queries</li>
                         <li>intuitively this can be explained by the small world principle</li>
                         <li>doubling the amount of workers does not help much</li>
@@ -413,32 +276,51 @@
                 </aside>
             </section>
             <section>
-                <h3>Caching the edge table on all workers</h3>
-                <div class="box">
-                    <div class="col-50">
-                        <img height="400px" src="img/hc-configuration.svg"/>
-                    </div>
-                    <div class="col-50">
-                        <img height="400px" src="img/cached-configuartion.svg"/>
-                    </div>
-                </div>
+                <h3>Our Solution: replicated <i>EdgeFrame</i></h3>
                 <ul>
-                    <li>CSR format optimizes memory footprint</li>
+                    <li>DataFrame specialized for edge relationship</li>
+                    <li>replicated on all workers</li>
+                    <li>uses compressed sparse row representation</li>
+                    <li>offers worst-case optimal join operation</li>
+                    <li>easily integrable into existing Spark projects</li>
+                    <li>open source</li>
+                    <li><i>logically partitioned</i> (open research)</li>
                 </ul>
                 <aside class="notes">
                     <ul>
-                        <li>If HC is optimal but converges to a full broadcast, why not cache the whole dataset on all workers
-                            directly?
-                        </li>
-                        <li>That is query independent.</li>
-                        <li>Hence, can be reused and then easily beats HC shuffle after 2 or 3 different queries</li>
-                        <li>How much data needs to be cached for arbritrary graph patters?</li>
-                        <li>Only one relationship of two integer attributes</li>
-                        <li>Can be compressed by CSR "compressed sparse row" format</li>
-                        <li>How does parallelization work then?</li>
-                        <li>logical partitioning: you have all data but you consider only parts of it</li>
+                        <li>explain solution as on slide</li>
+                        <li>better than HC because</li>
+                        <ul>
+                            <li>no query specific communication -> shuffle free joins</li>
+                            <li>opens possibilities for new partitiongs</li>
+                            <li>due to different angle (later)</li>
+                        </ul>
                     </ul>
                 </aside>
+            </section>
+            <section>
+                <h3>Do graphs fit into main memory?</h3>
+                <div class="box">
+                    <div class="col-50">
+                        <img src="img/graph-sizes.png"/>
+                    </div>
+                    <div class="col-50">
+                        <ul>
+                            <li>Study of openly available graph datasets</li>
+                            <ul>
+                                <!--                TODO cite snap and lab-->
+                                <li>SNAP</li>
+                                <li>Laborytory of Web Algorithms</li>
+                            </ul>
+                            <li>Total # Graphs: 154</li>
+                            <li>all but 3 fit into 256GB of RAM</li>
+                            <li>Maximum: 552 GB (Facebook 2011)</li>
+                        </ul>
+                    </div>
+                </div>
+                <!--                TODO generate better diagram -->
+                <!--                TODO cite paper? -->
+
             </section>
             <section>
                 <h3>Parallelization via logical partitionings</h3>
@@ -511,17 +393,6 @@
                 <img src="img/results-2.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                 <aside class="notes">
                 </aside>
-            </section>
-            <section>
-                <h3>Graph sizes in academia</h3>
-<!--                TODO generate better diagram -->
-<!--                TODO cite paper? -->
-<!--                TODO cite snap and lab-->
-                <img src="img/graph-sizes.png"/>
-                <ul>
-                    <li>Total # Graphs: 154</li>
-                    <li>Maximum: 552 GB (Facebook 2011)</li>
-                </ul>
             </section>
             <section>
                 <h3>List of datasets</h3>
