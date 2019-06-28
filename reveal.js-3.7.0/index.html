@@ -318,6 +318,14 @@
                         </ul>
                     </div>
                 </div>
+                <aside class="notes">
+                    <ul>
+                        <li>Study of snap and Laborytory of Web Algorithms</li>
+                        <li>154 graphs</li>
+                        <li>all but 3 fit in 256GB</li>
+                        <li>biggest fits in 552 GB</li>
+                    </ul>
+                </aside>
                 <!--                TODO generate better diagram -->
                 <!--                TODO cite paper? -->
 
@@ -326,11 +334,19 @@
                 <h3>Parallelization via logical partitionings</h3>
                 <ul>
                     <li>
-                        parallelization via logical partitioning: full dataset is on each worker but it works only
-                        on parts of it
+                        parallelization via logical partitioning: full dataset is on each worker but each worker only considers parts of it
                     </li>
                     <li>Hypercube</li>
+                    <ul>
+                        <li>slightly different angle then as distribution scheme</li>
+                        <li>can be pushed into the join</li>
+                        <li>in any case, deeper understanding of its scalability</li>
+                    </ul>
                     <li>partition on the first attribute to bind by the WCOJ</li>
+                    <ul>
+<!--                        TODO cite -->
+                        <li>fight skew with Intel's adaptive query execution</li>
+                    </ul>
                 </ul>
                 <aside class="notes">
                     <ul>
