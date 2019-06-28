@@ -365,6 +365,37 @@
                 </aside>
             </section>
         </section>
+        <section data-title="2nd contribution: specializing WCOJ's">
+            <section>
+                <h2>Specializing WCOJ's to graph-pattern matching: idea</h2>
+                <ul>
+                    <li>code specialization</li>
+                    <ul>
+                        <li>self-joins only</li>
+                        <li>two attributes only</li>
+                    </ul>
+                    <li>backing data structure: compressed sparse row (CSR)</li>
+                    <ul>
+                        <li>array access in <i>O(1)</i> instead of binary search in <i>O(log N)</i></li>
+                    </ul>
+                    <li>logical optimizations</li>
+                    <ul>
+                        <li>materializing small intersections instead of building them during iteration</li>
+                    </ul>
+                </ul>
+            </section>
+            <section>
+                <section>
+                    <h3>Specializing WCOJ's to graph-pattern matching: results</h3>
+<!--                    TODO as speedup graphs instead of in seconds -->
+                    <img src="img/results-1.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
+                    <img src="img/results-2.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
+                    <aside class="notes">
+                    </aside>
+                </section>
+            </section>
+
+        </section>
         <section data-title="Conclusion">
             <section data-no-title="true">
                 <h2>Where to find my work?</h2>
@@ -381,13 +412,7 @@
             </section>
         </section>
         <section data-title="Backup slides">
-            <section>
-                <h3>Spark vs WCOJ vs GraphWCOJ</h3>
-                <img src="img/results-1.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
-                <img src="img/results-2.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
-                <aside class="notes">
-                </aside>
-            </section>
+
             <section>
                 <h3>List of datasets</h3>
             </section>
