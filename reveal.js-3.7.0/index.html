@@ -365,41 +365,19 @@
                 </aside>
             </section>
         </section>
-        <section data-title="">
+        <section data-title="Conclusion">
             <section data-no-title="true">
                 <h2>Where to find my work?</h2>
                 <h3>https://github.com/PerFuchs</h3>
                 <p>Also, I'm looking for PhD opportunities or challenging positions in industry.</p>
             </section>
             <section>
-                <h3>Research Questions</h3>
-                <ol>
-                    <li>How well do WCOJ’s scale in Spark used for graph pattern matching?</li>
-                    <li>Can we gain performance in WCOJ’s by specializing them to graph pattern matching? (not in this presentation)</li>
-                </ol>
-                <aside class="notes">
-                    <ul>
-                        <li>build a scalable WCOJ in Spark</li>
-                        <ul>
-                            <li>Spark is well accepted in industry and there is currently no
-                                openly accessible implementation of a WCOJ in a widely used system
-                            </li>
-                            <li>Neo4J currently builds a Cypher frontend for Spark (stretch goal)</li>
-                            <li>Well suited for long running analytical queries with its fault tolerance and
-                                ability to run on many nodes
-                            </li>
-                        </ul>
-                        <li>Superiority over binary joins was ALWAYS - in every single paper - shown for graphs</li>
-                        <ul>
-                            <li>but specialization has not been considered</li>
-                            <li>not in this talk but feel free to ask</li>
-                            <li>We do: specialization to self joins on tables with two attributes, CSR and more</li>
-                        </ul>
-                    </ul>
-                </aside>
-            </section>
-            <section data-no-title="true">
-                <h2>References</h2>
+                <h2>Take aways</h2>
+                <ul>
+                    <li>optimal distribution scheme does not scale</li>
+                    <li>therefore, replicate</li>
+                    <li>WCOJ should be specialized to graphs</li>
+                </ul>
             </section>
         </section>
         <section data-title="Backup slides">
