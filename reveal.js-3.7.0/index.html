@@ -70,16 +70,21 @@
                 <h3>Worst-case optimal joins to the rescue</h3>
                 <img height="200px" src="img/triangle.svg" alt="depiction of triangle query">
                 <ul>
-                    <li>developed 2012 and proven to be worst-case optimal, e.g. for triangles in
-                        O(N<sup>3/2</sup>) and in general by the AGM bound
+                    <li>proven to be worst-case optimal by AGM bound, e.g. for triangles in
+                        O(N<sup>3/2</sup>)
                     </li>
-                    <li>Idea: build the join by <i>variable-at-a-time</i> approach</li>
+                    <li>Idea: build the join by a <i>variable-at-a-time</i> approach</li>
                     <li>no intermediary results</li>
-                    <li>high performance for graph-pattern matching is well established: [1] 2015, [2] 2015,
-                        [3] 2017, [4] 2018
+                    <li>superiority for graph-pattern matching is well established <sup>1,2,3</sup>
                     </li>
-                    <!--                    TODO citations -->
                 </ul>
+                <div class="footnote">
+                    <p><sup>1</sup> Join Processing for Graph Patterns: An Old Dog with New Tricks, Dung Nguyen et al, 2015</p>
+                    <p><sup>2</sup> From Theory to Practice: Efficient Join Query Evaluation in a Parallel Database System, Shumo Chu et al,
+                                  2015</p>
+                    <p><sup>3</sup> Distributed Evaluation of Subgraph Queries Using Worstcase Optimal Low-Memory Dataflows, Khaled Ammar
+                        et al, 2018</p>
+                </div>
                 <aside class="notes">
                     <ul>
                         <li>Note this is an n-ary join</li>
