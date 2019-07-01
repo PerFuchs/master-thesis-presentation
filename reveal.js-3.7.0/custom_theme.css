@@ -89,3 +89,13 @@
 .color-orange {
     color: orange;
 }
+
+.reveal .footnote {
+    font-size: 10px;
+}
+
+.reveal .footnote p {
+    margin: 5px 0;
+    font-size: 20px;
+    text-align: left;
+}
