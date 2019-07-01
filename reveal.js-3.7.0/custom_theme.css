@@ -1,5 +1,15 @@
-/* Header style */
+/* Font */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6,
+.reveal p {
+    /*font-family: "DejaVu Sans", serif;*/
+}
 
+/* Header style */
 .reveal h3 {
     margin-bottom: 5%;
 }
@@ -42,7 +52,8 @@
 .reveal .box .margin-10 {
     margin-right: 10%;
 }
-.reveal .box .col-60  {
+
+.reveal .box .col-60 {
     width: 60%;
 }
 
@@ -70,6 +81,7 @@
     margin-left: -35px;
 }
 
+/* Text colors */
 .color-blue {
     color: blue;
 }
@@ -90,10 +102,7 @@
     color: orange;
 }
 
-.reveal .footnote {
-    font-size: 10px;
-}
-
+/* Footnotes for citations */
 .reveal .footnote p {
     margin: 5px 0;
     font-size: 20px;
