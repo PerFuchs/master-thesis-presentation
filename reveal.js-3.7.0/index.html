@@ -342,9 +342,6 @@
                         <li>biggest fits in 552 GB</li>
                     </ul>
                 </aside>
-                <!--                TODO generate better diagram -->
-                <!--                TODO cite paper? -->
-
             </section>
             <section>
                 <h3>Parallelization via logical partitionings</h3>
@@ -360,10 +357,12 @@
                     </ul>
                     <li>partition on the first attribute to bind by the WCOJ</li>
                     <ul>
-<!--                        TODO cite -->
-                        <li>fight skew with Intel's adaptive query execution</li>
+                        <li>fight skew with Intel's adaptive query execution<sup>1</sup></li>
                     </ul>
                 </ul>
+                <div class="footnote">
+                    <p><sup>1</sup> Spark SQL Adaptive Execution at 100 TB, Carson Wang, 2018</p>
+                </div>
                 <aside class="notes">
                     <ul>
                         <li>HC itself</li>
