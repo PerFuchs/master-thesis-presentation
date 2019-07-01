@@ -146,7 +146,7 @@
                 <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50 margin-10">
-                        <h4>Idea</h4>
+                        <h4>Idea<sup>1</sup></h4>
                         <ul>
                             <li>organize <i>p</i> workers in a hypercube</li>
                             <li>one dimension per variable</li>
@@ -154,12 +154,16 @@
                             <li>such that <i>p = &#x220F;<sub>i</sub> k<sub>i</sub></i></li>
                             <li>proven to be communication optimal</li>
                         </ul>
+                        <div class="footnote">
+                            <p><sup>1</sup> Optimizing Joins in a Map-Reduce Environment, Foto Afrati and Jeffrey Ullman, 2010</p>
+                        </div>
                     </div>
                     <div class="col-40">
                         <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
                         <img height="400px" src="img/hypercube.svg" alt="depiction of hypercube for triangle query"/>
                     </div>
                 </div>
+
             </section>
             <section>
                 <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
