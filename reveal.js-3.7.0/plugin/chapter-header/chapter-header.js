@@ -77,6 +77,17 @@ chapterHeader.initDomNodes = function() {
   titleNode.innerHTML = title;
   // headerNode.appendChild(titleNode);
 
+  // Logos
+  var cwiLogoNode = document.createElement('img');
+  cwiLogoNode.setAttribute('id', 'cwi-logo');
+  cwiLogoNode.setAttribute('src', 'img/cwi-logo-no-text.png');
+  headerNode.appendChild(cwiLogoNode)
+
+  var sparkLogoNode = document.createElement('img');
+  sparkLogoNode.setAttribute('id', 'spark-logo');
+  sparkLogoNode.setAttribute('src', 'img/spark-logo.png');
+  headerNode.appendChild(sparkLogoNode)
+
   // current chapter
   this.chapterNode = document.createElement('p');
   this.chapterNode.setAttribute('id', 'chapter');

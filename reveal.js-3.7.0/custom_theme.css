@@ -29,6 +29,17 @@
     color: #c00;
 }
 
+#cwi-logo {
+    height: 50px;
+    margin-right: 10px;
+}
+
+#spark-logo {
+    height: 40px;
+    padding-top: 10px;
+    margin-right: 10px;
+}
+
 /* Enumeration style */
 .reveal li.space-below {
     padding-bottom: 5%;
