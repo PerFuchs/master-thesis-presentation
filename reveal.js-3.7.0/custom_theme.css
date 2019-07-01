@@ -119,3 +119,7 @@
     font-size: 20px;
     text-align: left;
 }
+
+.reveal table tr {
+    border-bottom: black 2px solid;
+}

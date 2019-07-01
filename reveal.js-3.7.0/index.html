@@ -81,7 +81,7 @@
                 <div class="footnote">
                     <p><sup>1</sup> Join Processing for Graph Patterns: An Old Dog with New Tricks, Dung Nguyen et al, 2015</p>
                     <p><sup>2</sup> From Theory to Practice: Efficient Join Query Evaluation in a Parallel Database System, Shumo Chu et al,
-                                  2015</p>
+                        2015</p>
                     <p><sup>3</sup> Distributed Evaluation of Subgraph Queries Using Worstcase Optimal Low-Memory Dataflows, Khaled Ammar
                         et al, 2018</p>
                 </div>
@@ -130,7 +130,8 @@
                 <ul>
                     <li>Spark distributes data over workers</li>
                     <li>computation follows the <i>Bulk synchronous parallel model</i> (local computations, shuffle, local
-                        computations, etc)</li>
+                        computations, etc)
+                    </li>
                     <li>joins work by shuffling the data such that the distribution allows local join algorithms</li>
                 </ul>
                 <aside class="notes">
@@ -320,7 +321,6 @@
                         <ul>
                             <li>study of openly available graph datasets</li>
                             <ul>
-                                <!--                TODO cite snap and lab-->
                                 <li>SNAP Datasets<sup>1</sup></li>
                                 <li>Laboratory for Web Algorithms<sup>2</sup></li>
                             </ul>
@@ -405,7 +405,7 @@
             <section>
                 <section>
                     <h3>Specializing WCOJ's to graph-pattern matching: results</h3>
-<!--                    TODO as speedup graphs instead of in seconds -->
+                    <!--                    TODO as speedup graphs instead of in seconds -->
                     <img src="img/results-1.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                     <img src="img/results-2.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                     <aside class="notes">
@@ -434,6 +434,47 @@
 
             <section>
                 <h3>List of datasets</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Variant</th>
+                        <th>Vertices</th>
+                        <th>Edges</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Social Network Benchmark<sup>1</sup></td>
+                        <td>scale factor 1</td>
+                        <td style="text-align: right">10,278</td>
+                        <td style="text-align: right">453,032</td>
+                    </tr>
+                    <tr>
+                        <td>Amazon co-purchase<sup>2</sup></td>
+                        <td>2nd March</td>
+                        <td style="text-align: right">262,111</td>
+                        <td style="text-align: right">1,234,877</td>
+                    </tr>
+                    <tr>
+                        <td>Twitter<sup>2</sup></td>
+                        <td>social-circles</td>
+                        <td style="text-align: right">81,306</td>
+                        <td style="text-align: right">2,420,766</td>
+                    </tr>
+                    <tr>
+                        <td>Amazon co-purchase<sup>2</sup></td>
+                        <td>1st June</td>
+                        <td style="text-align: right">403,394</td>
+                        <td style="text-align: right">3,387,388</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="footnote">
+                    <p><sup>1</sup> The LDBC Social Network Benchmark: Interactive Workload, Orri Erling et al, 2015</p>
+                    <p><sup>2</sup> SNAP Datasets: Stanford Large Network Dataset Collection, Jure Leskovec and Andrej Krevl, 2014</p>
+                </div>
             </section>
             <section>
                 <h3>Why are cyclic patterns important?</h3>
