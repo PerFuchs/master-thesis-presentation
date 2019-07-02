@@ -272,7 +272,6 @@
                             <li>analysis by theoretic estimation and simulation</li>
                             <li>a lot of duplicated work</li>
                             <li>not scalable in query size</li>
-                            <li>not scalable in numbers of workers</li>
                             <li>although being optimal</li>
                         </ul>
                     </div>
@@ -295,9 +294,9 @@
                 <ul>
                     <li>DataFrame specialized for edge relationship</li>
                     <li>replicated on all workers</li>
+                    <li>shuffle free worst case optimal join operation</li>
                     <li>uses compressed sparse row representation</li>
                     <li>easily integrable into existing Spark projects</li>
-                    <li>offers worst-case optimal join operation</li>
                     <li>open source</li>
                     <li><i>logically partitioned</i> (open research)</li>
                 </ul>
