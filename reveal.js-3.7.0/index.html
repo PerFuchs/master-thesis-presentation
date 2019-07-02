@@ -73,8 +73,8 @@
                     <li>proven to be worst-case optimal by AGM bound, e.g. for triangles in
                         O(N<sup>3/2</sup>)
                     </li>
-                    <li>Idea: build the join by a <i>variable-at-a-time</i> approach</li>
                     <li>no intermediary results</li>
+                    <li>Idea: build the join by a <i>variable-at-a-time</i> approach</li>
                     <li>superiority for graph-pattern matching is well established <sup>1,2,3</sup>
                     </li>
                 </ul>
@@ -170,9 +170,6 @@
                 <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50">
-                        <img height="400px" src="img/hypercube-example.svg" alt="depiction of hypercube for triangle query"/>
-                    </div>
-                    <div class="col-50">
                         <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
                         <div class="box">
                             <div class="col-30">
@@ -258,17 +255,18 @@
                             <div class="col-30"></div>
                         </div>
                     </div>
+                    <div class="col-50">
+                        <img height="400px" src="img/hypercube-example.svg" alt="depiction of hypercube for triangle query"/>
+                    </div>
                 </div>
+
                 <aside class="notes">
                     <li>duplication!</li>
                 </aside>
             </section>
             <section>
-                <h3>Hypercube shuffle converges to broadcasting for larger queries</h3>
+                <h3>Hypercube shuffle converges to full replication for larger queries</h3>
                 <div class="box">
-                    <div class="col-50">
-                        <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
-                    </div>
                     <div class="col-50">
                         <ul>
                             <li>analysis by theoretic estimation and simulation</li>
@@ -277,6 +275,10 @@
                             <li>not scalable in numbers of workers</li>
                             <li>although being optimal</li>
                         </ul>
+                    </div>
+<!--                    add 6-clique or 6-cylce-->
+                    <div class="col-50">
+                        <img src="img/shares-bar.svg" alt="Barchart showing duplication over bigger queries."/>
                     </div>
                 </div>
                 <aside class="notes">
@@ -294,8 +296,8 @@
                     <li>DataFrame specialized for edge relationship</li>
                     <li>replicated on all workers</li>
                     <li>uses compressed sparse row representation</li>
-                    <li>offers worst-case optimal join operation</li>
                     <li>easily integrable into existing Spark projects</li>
+                    <li>offers worst-case optimal join operation</li>
                     <li>open source</li>
                     <li><i>logically partitioned</i> (open research)</li>
                 </ul>
@@ -317,12 +319,12 @@
                     <li>
                         parallelization via logical partitioning: full dataset is on each worker but each worker only considers parts of it
                     </li>
-                    <li>Hypercube</li>
-                    <ul>
-                        <li>slightly different angle then as distribution scheme</li>
-                        <li>can be pushed into the join</li>
-                        <li>in any case, deeper understanding of its scalability</li>
-                    </ul>
+<!--                    <li>Hypercube</li>-->
+<!--                    <ul>-->
+<!--                        <li>different angle parallelization instead of distribution</li>-->
+<!--                        <li>can be pushed into the join</li>-->
+<!--                        <li>in any case, deeper understanding of its scalability</li>-->
+<!--                    </ul>-->
                     <li>partition on the first attribute to bind by the WCOJ</li>
                     <ul>
                         <li>fight skew with Intel's adaptive query execution<sup>1</sup></li>
@@ -350,24 +352,18 @@
         </section>
         <section data-title="2nd contribution: specializing WCOJ's">
             <section data-no-title="true">
-                <h1>2nd contribution: specializing WCOJ's</h1>
+                <h1>2nd contribution: specializing WCOJ's to graph-pattern matching</h1>
             </section>
             <section>
                 <h2>Specializing WCOJ's to graph-pattern matching: idea</h2>
                 <ul>
+                    <li>backing data structure: compressed sparse row (CSR)</li>
                     <li>code specialization</li>
                     <ul>
                         <li>self-joins only</li>
                         <li>two attributes only</li>
                     </ul>
-                    <li>backing data structure: compressed sparse row (CSR)</li>
-                    <ul>
-                        <li>array access in <i>O(1)</i> instead of binary search in <i>O(log N)</i></li>
-                    </ul>
                     <li>logical optimizations</li>
-                    <ul>
-                        <li>materializing small intersections instead of building them during iteration</li>
-                    </ul>
                 </ul>
             </section>
             <section>
