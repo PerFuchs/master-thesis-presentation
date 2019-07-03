@@ -129,9 +129,7 @@
                 <h3>Background: Spark</h3>
                 <ul>
                     <li>Spark distributes data over workers</li>
-                    <li>computation follows the <i>Bulk synchronous parallel model</i> (local computations, shuffle, local
-                        computations, etc)
-                    </li>
+                    <li>computation is organized in exchanging steps of local computations and shuffles</li>
                     <li>joins work by shuffling the data such that the distribution allows local join algorithms</li>
                 </ul>
                 <aside class="notes">
