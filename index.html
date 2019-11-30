@@ -25,6 +25,7 @@
 </head>
 <body>
 <div class="reveal">
+    <!--    TODO -->
     <div class="slides">
         <section data-title="Introduction">
             <section data-no-title="true">
@@ -96,12 +97,12 @@
             </section>
             <section>
                 <h3>Our contributions</h3>
+                <!-- TODO                Spark numbers on distribution slides-->
                 <ol>
                     <li>designing a scalable WCOJ for Spark</li>
                     <ul>
                         <li>Which distribution scheme to use?</li>
                         <li>open-source</li>
-                        <li>integrate the WCOJ with Cypher on Apache Spark (stretch goal)</li>
                     </ul>
                     <li>specializing WCOJ to graph pattern matching</li>
                     <ul>
@@ -296,7 +297,7 @@
                     <li>uses compressed sparse row representation</li>
                     <li>easily integrable into existing Spark projects</li>
                     <li>open source</li>
-                    <li><i>logically partitioned</i> (open research)</li>
+                    <li><i>logically partitioned</i></li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -316,20 +317,11 @@
                     <li>
                         parallelization via logical partitioning: full dataset is on each worker but each worker only considers parts of it
                     </li>
-                    <!--                    <li>Hypercube</li>-->
-                    <!--                    <ul>-->
-                    <!--                        <li>different angle parallelization instead of distribution</li>-->
-                    <!--                        <li>can be pushed into the join</li>-->
-                    <!--                        <li>in any case, deeper understanding of its scalability</li>-->
-                    <!--                    </ul>-->
-                    <li>partition on the first attribute to bind by the WCOJ</li>
-                    <ul>
-                        <li>fight skew with Intel's adaptive query execution<sup>1</sup></li>
-                    </ul>
+                    <!--                    TODO rename to shares everywhere -->
+                    <li>a logical Hypercube Shuffle</li>
+                    <li>partitioning along a single variable</li>
+                    <li>experimented with different implementations: hashing, range, round-robin</li>
                 </ul>
-                <div class="footnote">
-                    <p><sup>1</sup> Spark SQL Adaptive Execution at 100 TB, Carson Wang, 2018</p>
-                </div>
                 <aside class="notes">
                     <ul>
                         <li>HC itself</li>
@@ -339,12 +331,46 @@
                         <ul>
                             <li>WCOJ bind variables in a fixed global order, e.g. a, b, c for the triangle</li>
                             <li>partitiong the first variable</li>
-                            <li>sounds simple but this is how searching a tree is parallized in high-performance computing</li>
                             <li>biggest problem skew in the data</li>
-                            <li>in high-performance computing: use of workstealing -> adaptive query processing in Spark by Intel</li>
                         </ul>
                     </ul>
                 </aside>
+            </section>
+            <section>
+                <h3>Scaling static partitioning schemes</h3>
+                <div class="box">
+                    <div class="col-60">
+                        <img src="img/graphWCOJ-scaling-other-schemes.svg"/>
+                    </div>
+                    <div class="col-40">
+                        <ul>
+                            <li>Skew is a bigger problem than replicated work</li>
+                            <li>logical Shares does not scale</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Work-stealing instead of static partitioning</h3>
+                <ul>
+                    <li>job granularity: first variable binding</li>
+                    <li>communication: shared queue per executor</li>
+                    <li>distribution: static round-robin partitioning of the queue over executors</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Work-stealing scaling</h3>
+                <div class="box">
+                    <div class="col-50">
+                        <img height="400px" src="img/graphWCOJ-scaling-orkut.svg">
+                        <p>1 executor</p>
+                    </div>
+                    <div class="col-50">
+                        <img height="400px" src="img/distributed-scaling-orkut.svg">
+                        <p>4 executor</p>
+                        <!--                        TODO annotate scaling of 5-clique -->
+                    </div>
+                </div>
             </section>
         </section>
         <section data-title="2nd contribution: specializing WCOJ's">
@@ -360,11 +386,90 @@
                         <li>self-joins only</li>
                         <li>two attributes only</li>
                     </ul>
-                    <li>logical optimizations</li>
+                    <li>optimizing intersections</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Background: Leapfrog Triejoin</h3>
+                <img height="400px" src="img/trie.svg">
+            </section>
+            <section>
+                <h3>A graph as Trie</h3>
+                <div class="box">
+                    <div class="col-50">
+                        <table>
+                            <tr>
+                                <th>a</th>
+                                <th>b</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>1</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-50">
+                        <img height="300px" src="img/graph-trie.svg">
+                    </div>
+                </div>
+                <ul>
+                    <div style="margin-bottom: 10px"></div>
+                    <li>Code specialization: two levels only</li>
+                    <li>first level is the list of all vertices</li>
+                    <li>second level the adjacency lists</li>
+                    <li>CSR offers index into second level</li>
+<!--                    TODO could become more of a point -->
+                </ul>
+            </section>
+            <section>
+                <h3>Specializing intersections: original algorithm</h3>
+                <ul>
+                    <li>start with a sorted (by key) list of iterators</li>
+                    <li>seek value of largest iterator in smallest iterator</li>
+                    <li>do until smallest iterator and biggest iterator key are equal</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Specializing intersections: the graph workload</h3>
+                <div class="box">
+                    <div class="col-30">
+                        <img src="img/smallest.png">
+                        <p>smallest iterator</p>
+                    </div>
+                    <div class="col-30">
+                        <img src="img/smallest-biggest.png">
+                        <p>biggest intersection with smallest iterator</p>
+                    </div>
+                    <div class="col-30">
+                        <img src="img/total.png">
+                        <p>total intersection</p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Specializing intersections: new algorithm</h3>
+                <ul>
+                    <li>instead of sorting</li>
+                    <li>start with smallest (length) iterator and any other</li>
+                    <li>then binary intersections</li>
+                    <li>defer first level iterator seeks to the end, they nearly never limit the intersection</li>
                 </ul>
             </section>
             <section>
                 <h3>Specializing WCOJ's to graph-pattern matching: results</h3>
+                <!--                TODO new results -->
                 <img src="img/results-1-speedup.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                 <aside class="notes">
                 </aside>
@@ -374,18 +479,15 @@
             <section data-no-title="true">
                 <h2>Where to find my work?</h2>
                 <h3>https://github.com/PerFuchs</h3>
-                <p>
-                    Also, I'm looking for PhD opportunities or challenging positions in industry.
-                    Passionate about distributed systems and graphs!
-                </p>
             </section>
             <section>
                 <h2>Take aways</h2>
                 <ul>
                     <li>optimal distribution scheme does not scale</li>
                     <li>therefore, replicate</li>
+                    <li>static partitionings do not scale</li>
+                    <li>therefore work-stealing</li>
                     <li>WCOJ should be specialized to graphs</li>
-                    <li>open source</li>
                 </ul>
             </section>
         </section>
@@ -427,7 +529,18 @@
                         <td style="text-align: right">403,394</td>
                         <td style="text-align: right">3,387,388</td>
                     </tr>
-
+                    <tr>
+                        <td>LiveJournal<sup>2</sup></td>
+                        <td></td>
+                        <td style="text-align: right">4,847,571</td>
+                        <td style="text-align: right">68,993,773</td>
+                    </tr>
+                    <tr>
+                        <td>Orkut<sup>2</sup></td>
+                        <td></td>
+                        <td style="text-align: right">3,072,441</td>
+                        <td style="text-align: right">117,185,083</td>
+                    </tr>
                     </tbody>
                 </table>
                 <div class="footnote">
