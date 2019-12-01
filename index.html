@@ -25,7 +25,6 @@
 </head>
 <body>
 <div class="reveal">
-    <!--    TODO -->
     <div class="slides">
         <section data-title="Introduction">
             <section data-no-title="true">
@@ -97,7 +96,6 @@
             </section>
             <section>
                 <h3>Our contributions</h3>
-                <!-- TODO                Spark numbers on distribution slides-->
                 <ol>
                     <li>designing a scalable WCOJ for Spark</li>
                     <ul>
@@ -317,7 +315,6 @@
                     <li>
                         parallelization via logical partitioning: full dataset is on each worker but each worker only considers parts of it
                     </li>
-                    <!--                    TODO rename to shares everywhere -->
                     <li>a logical Hypercube Shuffle</li>
                     <li>partitioning along a single variable</li>
                     <li>experimented with different implementations: hashing, range, round-robin</li>
@@ -368,7 +365,6 @@
                     <div class="col-50">
                         <img height="400px" src="img/distributed-scaling-orkut.svg">
                         <p>4 executor</p>
-                        <!--                        TODO annotate scaling of 5-clique -->
                     </div>
                 </div>
             </section>
@@ -430,8 +426,12 @@
                     <li>first level is the list of all vertices</li>
                     <li>second level the adjacency lists</li>
                     <li>CSR offers index into second level</li>
-<!--                    TODO could become more of a point -->
                 </ul>
+            </section>
+            <section>
+                <h3>Compressed sparse row representation</h3>
+                <img height="400px" src="img/csr.png"/>
+                <p>CSR offers index from first into second level of the TrieIterator</p>
             </section>
             <section>
                 <h3>Specializing intersections: original algorithm</h3>
@@ -439,6 +439,7 @@
                     <li>start with a sorted (by key) list of iterators</li>
                     <li>seek value of largest iterator in smallest iterator</li>
                     <li>do until smallest iterator and biggest iterator key are equal</li>
+                    <li>O(m * n), n = |iterators|, m = length smallest iterator</li>
                 </ul>
             </section>
             <section>
@@ -465,12 +466,12 @@
                     <li>start with smallest (length) iterator and any other</li>
                     <li>then binary intersections</li>
                     <li>defer first level iterator seeks to the end, they nearly never limit the intersection</li>
+                    <li>&Omega;(m * n), n = |iterators|, m = length smallest iterator</li>
                 </ul>
             </section>
             <section>
                 <h3>Specializing WCOJ's to graph-pattern matching: results</h3>
-                <!--                TODO new results -->
-                <img src="img/results-1-speedup.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
+                <img src="img/spark-vs-wcoj-vs-graphWCOJ.svg" alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                 <aside class="notes">
                 </aside>
             </section>
