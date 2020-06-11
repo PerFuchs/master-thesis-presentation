@@ -41,6 +41,14 @@
 }
 
 /* Enumeration style */
+
+.reveal li {
+    padding-bottom: 2%;
+}
+
+.reveal li.no-padding {
+    padding-bottom: 0%;
+}
 .reveal li.space-below {
     padding-bottom: 5%;
 }
