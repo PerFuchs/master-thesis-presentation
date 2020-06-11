@@ -40,6 +40,7 @@
 
 #chapter-header p {
     color: #c00;
+    font-size: 30px;
 }
 
 #cwi-logo {
@@ -143,4 +144,8 @@
 
 .reveal table tr {
     border-bottom: black 2px solid;
+}
+
+.slide-number span {
+    font-size: 30px;
 }
