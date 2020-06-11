@@ -9,12 +9,22 @@
     /*font-family: "DejaVu Sans", serif;*/
 }
 
+.reveal {
+
+}
+
 /* Header style */
+
+.reveal h1 {
+    text-align: left;
+}
 .reveal h3 {
+    text-align: left;
     margin-bottom: 5%;
 }
 
 .reveal h5 {
+    text-align: left;
     margin-bottom: 5px;
 }
 
