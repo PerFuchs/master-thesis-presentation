@@ -141,7 +141,7 @@
                 </aside>
             </section>
             <section>
-                <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
+                <h3>Shares shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50 margin-10">
                         <h4>Idea<sup>1</sup></h4>
@@ -164,7 +164,7 @@
 
             </section>
             <section>
-                <h3>Hypercube shuffle: optimal distribution for n-ary joins</h3>
+                <h3>Shares shuffle: optimal distribution for n-ary joins</h3>
                 <div class="box">
                     <div class="col-50">
                         <p>triangles(a, b, c) <- R(a, b), S(b, c), T(c, a)</p>
@@ -262,7 +262,7 @@
                 </aside>
             </section>
             <section>
-                <h3>Hypercube shuffle converges to full replication for larger queries</h3>
+                <h3>Shares shuffle converges to full replication for larger queries</h3>
                 <div class="box">
                     <div class="col-50">
                         <ul>
@@ -287,10 +287,10 @@
                 </aside>
             </section>
             <section>
-                <h3>Our Solution: replicated <i>EdgeFrame</i></h3>
+                <h3>Our Solution: cached <i>EdgeFrame</i></h3>
                 <ul>
                     <li>DataFrame specialized for edge relationship</li>
-                    <li>replicated on all workers</li>
+                    <li>cached on all workers</li>
                     <li>shuffle free worst case optimal join operation</li>
                     <li>uses compressed sparse row representation</li>
                     <li>easily integrable into existing Spark projects</li>
@@ -317,7 +317,6 @@
                     </li>
                     <li>a logical Hypercube Shuffle</li>
                     <li>partitioning along a single variable</li>
-                    <li>experimented with different implementations: hashing, range, round-robin</li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -351,8 +350,8 @@
                 <h3>Work-stealing instead of static partitioning</h3>
                 <ul>
                     <li>job granularity: first variable binding</li>
-                    <li>communication: shared queue per executor</li>
-                    <li>distribution: static round-robin partitioning of the queue over executors</li>
+                    <li>communication: shared queue per worker</li>
+                    <li>multiple workers: static round-robin partitioning of the queue</li>
                 </ul>
             </section>
             <section>
@@ -360,13 +359,26 @@
                 <div class="box">
                     <div class="col-50">
                         <img height="400px" src="img/graphWCOJ-scaling-orkut.svg">
-                        <p>1 executor</p>
+                        <p>1 worker</p>
                     </div>
                     <div class="col-50">
                         <img height="400px" src="img/distributed-scaling-orkut.svg">
-                        <p>4 executor</p>
+                        <p>4 worker</p>
                     </div>
                 </div>
+            </section>
+        </section>
+        <section data-title="Conclusion">
+            <section>
+                <h3>Take aways</h3>
+                <ul>
+                    <li>optimal distribution scheme does not scale</li>
+                    <li>therefore, replicate</li>
+                    <li>static partitionings do not scale</li>
+                    <li>therefore work-stealing</li>
+                    <li class="space-below">WCOJ should be specialized to graphs</li>
+                    <li>find my work at: <a href="https://github.com/PerFuchs">GitHub/PerFuchs</a></li>
+                </ul>
             </section>
         </section>
         <section data-title="2nd contribution: specializing WCOJs">
@@ -392,19 +404,6 @@
                      alt="diagram showing Spark joins vs WCOJ vs GraphWCOJ on SNB for a few queries">
                 <aside class="notes">
                 </aside>
-            </section>
-        </section>
-        <section data-title="Conclusion">
-            <section>
-                <h3>Take aways</h3>
-                <ul>
-                    <li>optimal distribution scheme does not scale</li>
-                    <li>therefore, replicate</li>
-                    <li>static partitionings do not scale</li>
-                    <li>therefore work-stealing</li>
-                    <li class="space-below">WCOJ should be specialized to graphs</li>
-                    <li>find my work at: <a href="https://github.com/PerFuchs">GitHub/PerFuchs</a></li>
-                </ul>
             </section>
         </section>
         <section data-title="Backup slides">
